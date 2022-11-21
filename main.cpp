@@ -30,9 +30,7 @@ void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillS
             {
                 if(num == MS)
                 {
-                    mainStatus.push_back(str_buf);
-                    cout << "스탯 크기: " << str_buf << "스탯 위치: " << num << endl;
-                    
+                    mainStatus.push_back(str_buf);                    
                     if(MS - MSdummy != 0 && (MS - MSdummy) / 8 % 2 == 0)
                     {
                         MSdummy = MSdummy + MSnextline;
@@ -89,21 +87,37 @@ int main(int argc, char** argv)
     
     string path = "data_ANSI.csv";
 
+    ofstream ofs;
+    ofs.open("text_data.txt", ios::out);
 
-    vector<string> mainStatus;
+
+    vector<string> mainStatusName = {"근력", "교육", "지능", "건강", "외모", "정신력", "크기", "민첩", "행운"};
+    vector<string> mainStatuslevel;
+
     vector<string> skillStatus;
     vector<string> skillLevel;
 
-    readCSVfile(path, mainStatus, skillStatus, skillLevel);
+    readCSVfile(path, mainStatuslevel, skillStatus, skillLevel);
 
+    for(int i = 0; i < mainStatuslevel.size(); i++)
+    {
+        ofs << mainStatusName[i] << " : " << mainStatuslevel[i] <<endl;
+    }
+
+    ofs << "-----------------------------------------" <<endl;
 
     for(int i = 0; i < skillStatus.size(); i++)
     {
-        cout << "staus name: " << skillStatus[i] << ", status level: " << skillLevel[i] <<endl;
+        ofs << skillStatus[i] << " : " << skillLevel[i] <<endl;
     }
+    ofs << "-----------------------------------------------" <<endl;
+
+    cout << "[codes are successfully done]" << endl;
     
     return 0;
 }
+
+
 
 //시트 한줄에 67개
 // 근력 시작 485
