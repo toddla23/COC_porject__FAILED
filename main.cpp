@@ -20,6 +20,8 @@ void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillS
     int line = 938, skillLocation = 938, nextline = 52, dummy = 938;
     int cnt = 0, flag = 0;
 
+
+
     while(!fs.eof())
     {
         getline(fs,str_buf,',');
@@ -42,7 +44,7 @@ void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillS
             }
         }
 
-        if(str_buf != "")
+         if(str_buf != "")
         {   
                 
             if(num == skillLocation && num > 900 && num < 1900)
@@ -75,6 +77,7 @@ void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillS
                 }
 
             }
+ 
         }
             num++;
     }
@@ -85,7 +88,7 @@ void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillS
 int main(int argc, char** argv) 
 {
     
-    string path = "data_ANSI.csv";
+    string path = "data_UTF-8.csv";
 
     ofstream ofs;
     ofs.open("text_data.txt", ios::out);
