@@ -26,7 +26,16 @@ int main(int argc, char** argv) {
     {
         getline(fs,str_buf,',');
 
-        if(str_buf != "")
+        cout << str_buf << endl;
+
+        if(num == 490)
+        {
+            cout << num;
+            break;
+        }
+
+
+/*         if(str_buf != "")
         {   
                 
             if(num == X && num > 900 && num < 1900)
@@ -59,8 +68,8 @@ int main(int argc, char** argv) {
                 }
 
             }
-
-        }
+ 
+        }*/
             num++;
     }
     fs.close();
