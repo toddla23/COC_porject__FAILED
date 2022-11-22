@@ -6,7 +6,7 @@
 using namespace std;
 
 void printMainStatus(vector<int> mainStatus);
-void printSkillStatus(vector<int> mainStatus, vector<string> skillStatus, vector<int>skillLevel);
+void printStatus(vector<int> mainStatus, vector<string> skillStatus, vector<int>skillLevel);
 
 void readCSVfile(string path, vector<int> &mainStatus, vector<string> &skillStatus, vector<int> &skillLevel)
 {
@@ -89,7 +89,7 @@ void readCSVfile(string path, vector<int> &mainStatus, vector<string> &skillStat
 int main(int argc, char** argv) 
 {
     
-    string path = "data_UTF-8.csv";
+    string path = "data_ANSI.csv";
 
     ofstream ofs;
     ofs.open("text_data.txt", ios::out);
@@ -117,11 +117,11 @@ int main(int argc, char** argv)
     ofs << "-----------------------------------------------" <<endl;
  */
 
-    printMainStatus(mainStatuslevel);
+    //printMainStatus(mainStatuslevel);
     
     //cout << endl;
 
-    printSkillStatus(mainStatuslevel, skillStatus, skillLevel);
+    printStatus(mainStatuslevel, skillStatus, skillLevel);
 
     //cout << endl;
 
@@ -130,17 +130,17 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void printMainStatus(vector<int> mainStatus)
+/* void printMainStatus(vector<int> mainStatus)
 {
     ofstream ofs;
-    ofs.open("text_data.txt", ios::out);
+    ofs.open("text_data.txt", ios::out); */
 
     /*
     { "kind": "character", "data": { "name": "이름 없는 탐사자", "status":[{"label":"HP","value":5,"max":5},
     {"label":"MP","value":0,"max":0},{"label":"SAN","value":1,"max":1},
     {"label":"행운","value":1,"max":1}],
     "params":[{"label":"DB","value":"1"}]
-    */
+   
     
     int HP = (mainStatus[3] + mainStatus[6]) / 10;
     int MP = mainStatus[5] / 5;
@@ -152,9 +152,9 @@ void printMainStatus(vector<int> mainStatus)
     <<"{\"label\":\"행운\",\"value\":"<< LUCK << ",\"max\":" <<LUCK << "}]," 
     << "\"params\":[{\"label\":\"DB\",\"value\":\"1\"}],";
 
-}
+} */
 
-void printSkillStatus(vector<int> mainStatus, vector<string> skillStatus, vector<int>skillLevel)
+void printStatus(vector<int> mainStatus, vector<string> skillStatus, vector<int>skillLevel)
 {
     ofstream ofs;
     ofs.open("text_data.txt", ios::out);
@@ -170,7 +170,20 @@ void printSkillStatus(vector<int> mainStatus, vector<string> skillStatus, vector
     \ncc<=10 항법\ncc<=10 추적\ncc<=5 승마\ncc<=5 조련\ncc<=1 폭파\ncc<=1 포격"} }
     */
 
-   ofs << "\"commands\": \"cc<={SAN} 이성체크\\ncc<={행운} 행운\\ncc<="<< mainStatus[0] << " 근력\\ncc<=" << mainStatus[3] <<" 건강\\"
+
+    int HP = (mainStatus[3] + mainStatus[6]) / 10;
+    int MP = mainStatus[5] / 5;
+    int SAN = mainStatus[5];
+    int LUCK = mainStatus[8];
+    
+    ofs << "{ \"kind\": \"character\", \"data\": { \"name\": \"이름 없는 탐사자\", \"status\":[{\"label\":\"HP\",\"value\":\"" << HP << ",\"max\":" << HP << "},"
+    << "{\"label\":\"MP\",\"value\":" << MP <<",\"max\":"<< MP << "}," << "{\"label\":\"SAN\",\"value\":" << SAN << ",\"max\":"<< SAN <<"}," 
+    <<"{\"label\":\"행운\",\"value\":"<< LUCK << ",\"max\":" <<LUCK << "}]," 
+    << "\"params\":[{\"label\":\"DB\",\"value\":\"1\"}],";
+
+
+
+    ofs << "\"commands\": \"cc<={SAN} 이성체크\\ncc<={행운} 행운\\ncc<="<< mainStatus[0] << " 근력\\ncc<=" << mainStatus[3] <<" 건강\\"
     << "ncc<=" << mainStatus[6] << "크기\\ncc<=" << mainStatus[7] << " 민첩\\ncc<=" << mainStatus[4] << " 외모\\ncc<=" << mainStatus[1] << " 교육 (지식)\\ncc<=" <<mainStatus[2]<< "지능 (아이디어)"<<
     "\\ncc<=" << mainStatus[5] << " 정신력\\n1d3+{DB} 피해(맨손)";
 
