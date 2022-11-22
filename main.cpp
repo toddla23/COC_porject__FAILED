@@ -4,10 +4,11 @@
 #include <vector>
 
 using namespace std;
-    
 
+void printMainStatus(vector<int> mainStatus);
+void printSkillStatus(vector<int> mainStatus, vector<string> skillStatus, vector<int>skillLevel);
 
-void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillStatus, vector<string> &skillLevel)
+void readCSVfile(string path, vector<int> &mainStatus, vector<string> &skillStatus, vector<int> &skillLevel)
 {
     string str_buf;         
     fstream fs; 
@@ -32,7 +33,7 @@ void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillS
             {
                 if(num == MS)
                 {
-                    mainStatus.push_back(str_buf);                    
+                    mainStatus.push_back(stoi(str_buf));
                     if(MS - MSdummy != 0 && (MS - MSdummy) / 8 % 2 == 0)
                     {
                         MSdummy = MSdummy + MSnextline;
@@ -59,7 +60,7 @@ void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillS
                 if(flag == 1)
                 {    
                     //cout<<"status level : " << str_buf<< ", location: " << num << endl;
-                    skillLevel.push_back(str_buf);
+                    skillLevel.push_back(stoi(str_buf));
                     flag = 0;
                 }
 
@@ -88,21 +89,21 @@ void readCSVfile(string path, vector<string> &mainStatus, vector<string> &skillS
 int main(int argc, char** argv) 
 {
     
-    string path = "data_ANSI.csv";
+    string path = "data_UTF-8.csv";
 
     ofstream ofs;
     ofs.open("text_data.txt", ios::out);
 
 
     vector<string> mainStatusName = {"근력", "교육", "지능", "건강", "외모", "정신력", "크기", "민첩", "행운"};
-    vector<string> mainStatuslevel;
+    vector<int> mainStatuslevel;
 
     vector<string> skillStatus;
-    vector<string> skillLevel;
+    vector<int> skillLevel;
 
     readCSVfile(path, mainStatuslevel, skillStatus, skillLevel);
 
-    for(int i = 0; i < mainStatuslevel.size(); i++)
+    /* for(int i = 0; i < mainStatuslevel.size(); i++)
     {
         ofs << mainStatusName[i] << " : " << mainStatuslevel[i] <<endl;
     }
@@ -114,10 +115,71 @@ int main(int argc, char** argv)
         ofs << skillStatus[i] << " : " << skillLevel[i] <<endl;
     }
     ofs << "-----------------------------------------------" <<endl;
+ */
+
+    printMainStatus(mainStatuslevel);
+    
+    //cout << endl;
+
+    printSkillStatus(mainStatuslevel, skillStatus, skillLevel);
+
+    //cout << endl;
 
     cout << "[codes are successfully done]" << endl;
     
     return 0;
+}
+
+void printMainStatus(vector<int> mainStatus)
+{
+    ofstream ofs;
+    ofs.open("text_data.txt", ios::out);
+
+    /*
+    { "kind": "character", "data": { "name": "이름 없는 탐사자", "status":[{"label":"HP","value":5,"max":5},
+    {"label":"MP","value":0,"max":0},{"label":"SAN","value":1,"max":1},
+    {"label":"행운","value":1,"max":1}],
+    "params":[{"label":"DB","value":"1"}]
+    */
+    
+    int HP = (mainStatus[3] + mainStatus[6]) / 10;
+    int MP = mainStatus[5] / 5;
+    int SAN = mainStatus[5];
+    int LUCK = mainStatus[8];
+    
+    ofs << "{ \"kind\": \"character\", \"data\": { \"name\": \"이름 없는 탐사자\", \"status\":[{\"label\":\"HP\",\"value\":\"" << HP << ",\"max\":" << HP << "},"
+    << "{\"label\":\"MP\",\"value\":" << MP <<",\"max\":"<< MP << "}," << "{\"label\":\"SAN\",\"value\":" << SAN << ",\"max\":"<< SAN <<"}," 
+    <<"{\"label\":\"행운\",\"value\":"<< LUCK << ",\"max\":" <<LUCK << "}]," 
+    << "\"params\":[{\"label\":\"DB\",\"value\":\"1\"}],";
+
+}
+
+void printSkillStatus(vector<int> mainStatus, vector<string> skillStatus, vector<int>skillLevel)
+{
+    ofstream ofs;
+    ofs.open("text_data.txt", ios::out);
+
+    /*
+    "commands": "cc<={SAN} 이성체크\ncc<={행운} 행운\ncc<=1 근력\ncc<=50 건강\
+    ncc<=1 크기\ncc<=1 민첩\ncc<=1 외모\ncc<=1 교육 (지식)\ncc<=1 지능 (아이디어)
+    \ncc<=1 정신력\n1d3+{DB} 피해(맨손)
+
+
+    \ncc<=ctrl+shift+V 여기에 복붙\ncc<=1 입력\ncc<=2 예시\ncc<=70 관찰력\ncc<=70 관찰력\ncc<=65 듣기\ncc<=65 자료조사\
+    ncc<=5 컴퓨터 사용\ncc<=1 전자기기\ncc<=10 전기수리\ncc<=10 기계수리\ncc<=20 자동차 운전\ncc<=1 중장비 조작\ncc<=1 파일럿()
+    \ncc<=10 항법\ncc<=10 추적\ncc<=5 승마\ncc<=5 조련\ncc<=1 폭파\ncc<=1 포격"} }
+    */
+
+   ofs << "\"commands\": \"cc<={SAN} 이성체크\\ncc<={행운} 행운\\ncc<="<< mainStatus[0] << " 근력\\ncc<=" << mainStatus[3] <<" 건강\\"
+    << "ncc<=" << mainStatus[6] << "크기\\ncc<=" << mainStatus[7] << " 민첩\\ncc<=" << mainStatus[4] << " 외모\\ncc<=" << mainStatus[1] << " 교육 (지식)\\ncc<=" <<mainStatus[2]<< "지능 (아이디어)"<<
+    "\\ncc<=" << mainStatus[5] << " 정신력\\n1d3+{DB} 피해(맨손)";
+
+    for(int i = 0; i < skillStatus.size(); i++)
+    {
+        ofs << "\\ncc<=" << skillLevel[i] << " " << skillStatus[i];
+    }
+    ofs << "\"} }";
+
 }
 
 
@@ -158,7 +220,8 @@ int main(int argc, char** argv)
 /*
 { "kind": "character", "data": { "name": "이름 없는 탐사자", "status":[{"label":"HP","value":5,"max":5},
 {"label":"MP","value":0,"max":0},{"label":"SAN","value":1,"max":1},{"label":"행운","value":1,"max":1}],
-"params":[{"label":"DB","value":"1"}],"commands": "cc<={SAN} 이성체크\ncc<={행운} 행운\ncc<=1 근력\ncc<=50 건강
+"params":[{"label":"DB","value":"1"}],
+"commands": "cc<={SAN} 이성체크\ncc<={행운} 행운\ncc<=1 근력\ncc<=50 건강
 \ncc<=1 크기\ncc<=1 민첩\ncc<=1 외모\ncc<=1 교육 (지식)\ncc<=1 지능 (아이디어)\ncc<=1 정신력\n1d3+{DB} 피해(맨손)
 \ncc<=ctrl+shift+V 여기에 복붙\ncc<=1 입력\ncc<=2 예시\ncc<=70 관찰력\ncc<=70 관찰력\ncc<=65 듣기\ncc<=65 자료조사\
 ncc<=5 컴퓨터 사용\ncc<=1 전자기기\ncc<=10 전기수리\ncc<=10 기계수리\ncc<=20 자동차 운전\ncc<=1 중장비 조작\ncc<=1 파일럿()
