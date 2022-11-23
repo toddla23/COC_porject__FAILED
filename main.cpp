@@ -45,7 +45,7 @@ void readCSVfile(string path, vector<int> &mainStatus, vector<string> &skillStat
             }
         }
 
-         if(str_buf != "")
+        if(str_buf != "")
         {   
                 
             if(num == skillLocation && num > 900 && num < 1900)
