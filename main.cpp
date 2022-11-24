@@ -86,11 +86,9 @@ void readCSVfile(string path, vector<int> &mainStatus, vector<string> &skillStat
     
 }
 
-int main(int argc, char** argv) 
+int func(string path) 
 {
     
-    string path = "testData_ANSI.csv";
-
     ofstream ofs;
     ofs.open("text_data.txt", ios::out);
 
@@ -193,6 +191,12 @@ void printStatus(vector<int> mainStatus, vector<string> skillStatus, vector<int>
     }
     ofs << "\"} }";
 
+}
+
+int main(void)
+{
+    string path = "data_ANSI.csv";
+    func(path);
 }
 
 
