@@ -89,13 +89,13 @@ void readCSVfile(string path, vector<int> &mainStatus, vector<string> &skillStat
 int main(int argc, char** argv) 
 {
     
-    string path = "data_ANSI.csv";
+    string path = "testData_ANSI.csv";
 
     ofstream ofs;
     ofs.open("text_data.txt", ios::out);
 
 
-    vector<string> mainStatusName = {"근력", "교육", "지능", "건강", "외모", "정신력", "크기", "민첩", "행운"};
+    vector<string> mainStatusName = {"근력", "교육", "지능", "건강", "외모", "정신력", "크기", "민첩", "행운"}; // 여기 꺠지는지 확인 해야함
     vector<int> mainStatuslevel;
 
     vector<string> skillStatus;
