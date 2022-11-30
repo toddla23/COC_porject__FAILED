@@ -13,6 +13,10 @@ using namespace std;
 typedef vector<int> int_vector;
 typedef vector<string> string_vector;
 
+int testfunc(int n)
+{
+    return n + 1;
+}
 
 void readCSVfile(string path, int_vector& mainStatus, string_vector& skillStatus, int_vector& skillLevel)
 {
